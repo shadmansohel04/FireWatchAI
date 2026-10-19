@@ -9,7 +9,6 @@ class DummyYOLO:
 
   # Input: frame (Any) - The input frame to be processed, not used in this mock implementation.
   def predict(self, frame: Any) -> list[dict[str, Any]]:
-    # Simulate processing latency if enabled
     if self.simulate_latency:
       time.sleep(random.uniform(0.05, 0.15))
 
