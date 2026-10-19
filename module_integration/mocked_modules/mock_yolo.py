@@ -2,7 +2,7 @@ import time
 import random
 from typing import Any
 
-class DummyYOLO:
+class MockYolo:
   def __init__(self, simulate_latency: bool = True) -> None:
     self.simulate_latency = simulate_latency
     self.classes = ['fire', 'smoke', None]
