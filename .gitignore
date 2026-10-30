@@ -23,3 +23,7 @@ ENV/
 *.jpeg
 
 *event_log.json
+
+# Vision LLM outputs
+incident_reports/
+llm_test_results/
