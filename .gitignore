@@ -13,9 +13,13 @@ ENV/
 # Environment variables / Secret files
 .env
 
-# Video files and directories
+# Video files and images
 *.mp4
 *.avi
 *.mov
 *.mkv
 *.webm
+*.jpg
+*.jpeg
+
+*event_log.json
