@@ -1,6 +1,7 @@
 import os
 import cv2
 import argparse
+from event_logger import spawn_logger_thread
 from event_tracker import EventTracker
 from llm_handler import spawn_llm_thread
 from yolo_detector import YOLODetector
@@ -49,6 +50,7 @@ def main() -> None:
       if trigger_alert and timestamp:
         frame_to_analyze = annotated_frame.copy()
         spawn_llm_thread(frame_to_analyze, timestamp)
+        spawn_logger_thread(frame_to_analyze, timestamp)
 
       cv2.imshow("FireWatch-AI Camera Stream", annotated_frame)
 
