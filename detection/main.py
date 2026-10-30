@@ -1,6 +1,11 @@
 import os
 import cv2
 import argparse
+from dotenv import load_dotenv
+
+# Load environment variables from .env file in project root or current directory
+load_dotenv()
+
 from event_logger import spawn_logger_thread
 from event_tracker import EventTracker
 from llm_handler import spawn_llm_thread
