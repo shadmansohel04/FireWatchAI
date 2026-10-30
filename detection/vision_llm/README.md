@@ -1,4 +1,4 @@
-# Vision LLM & Reporting Component (Student C)
+# Vision LLM & Reporting Component (Safwan Haque)
 
 When the YOLO + event tracker pipeline confirms a fire/smoke event, this component
 sends the event frame to a Vision LLM (Claude), gets back a fixed-format description
