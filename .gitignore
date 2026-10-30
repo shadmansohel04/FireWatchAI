@@ -19,5 +19,3 @@ ENV/
 *.mov
 *.mkv
 *.webm
-test_video/
-**/test_video/
