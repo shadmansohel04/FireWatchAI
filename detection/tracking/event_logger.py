@@ -72,3 +72,4 @@ def spawn_logger_thread(frame_copy: Any, timestamp: str) -> None:
     daemon=True
   )
   log_thread.start()
+

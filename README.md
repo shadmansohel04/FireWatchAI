@@ -9,7 +9,7 @@ The system currently runs on a laptop. Deployment on a Raspberry Pi 5 with LEDs 
 ## How it works
 
 1. **Video input**: webcam or a video file (OpenCV).
-2. **Detection**: YOLO model (`detection/best.pt`, trained from `yolo11n`) finds fire and smoke.
+2. **Detection**: YOLO model (`detection/yolo/best.pt`, trained from `yolo11n`) finds fire and smoke.
 3. **Event tracking**: an alert fires only if fire/smoke is seen in 7 of the last 10 frames, with a 5 s cooldown between alerts.
 4. **On an alert**:
    - the frame is saved to `event_frames/` and logged in `event_log.json`
@@ -28,17 +28,20 @@ The system currently runs on a laptop. Deployment on a Raspberry Pi 5 with LEDs 
 
 ```
 detection/
-  main.py            # runs the full pipeline
-  yolo_detector.py   # YOLO model wrapper
-  best.pt            # trained YOLO weights
-  mock_yolo.py       # fake detector for testing without the model
-  event_tracker.py   # sliding-window event confirmation
-  event_logger.py    # saves event frames + JSON log
-  llm_handler.py     # sends events to the Vision LLM
-  vision_llm/        # Vision LLM + report code (see its README)
-  llm_sample_test.py # tests the Vision LLM on sample images/videos
-  tests/             # unit tests
-  test_video/        # links to test videos
+  __main__.py          # pipeline entry point (python -m detection)
+  llm_handler.py       # sends events to the Vision LLM
+  yolo/                # YOLO detection
+    detector.py        # YOLO model wrapper
+    mock_detector.py   # fake detector for testing without the model
+    best.pt            # trained YOLO weights
+  tracking/            # event tracking & logging
+    event_tracker.py   # sliding-window event confirmation
+    event_logger.py    # saves event frames + JSON log
+  vision_llm/          # Vision LLM + report code (see its README)
+  tests/               # unit tests
+    test_video/        # test videos
+tools/
+  llm_sample_test.py   # tests the Vision LLM on sample images/videos
 ```
 
 ## Setup
@@ -59,8 +62,9 @@ To try the pipeline without a key, set `FIREWATCH_LLM_MOCK=1` to use a fake LLM 
 ## Running
 
 ```bash
-python detection/main.py                           # webcam
-python detection/main.py --source path/to/video.mp4
+python -m detection                                # webcam
+python -m detection --source path/to/video.mp4     # video file
+python -m detection --mock                         # mock YOLO (no weights needed)
 ```
 
 Press `q` or `Esc` to quit.
@@ -68,7 +72,7 @@ Press `q` or `Esc` to quit.
 ## Tests
 
 ```bash
-python -m unittest discover -s detection/tests
+python -m pytest detection/tests/ -v
 ```
 
-Test video links are in `detection/test_video/videos.md`.
+Test video links are in `detection/tests/test_video/videos.md`.

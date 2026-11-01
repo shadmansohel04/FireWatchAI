@@ -3,8 +3,8 @@ import atexit
 import threading
 from typing import Any, Optional, Sequence
 
-from vision_llm import ReportWorker, VisionLLMClient
-from vision_llm.mock_client import MockAnthropicClient
+from detection.vision_llm import ReportWorker, VisionLLMClient
+from detection.vision_llm.mock_client import MockAnthropicClient
 
 REPORTS_DIR = os.getenv("FIREWATCH_REPORTS_DIR", "incident_reports")
 
@@ -30,7 +30,7 @@ def spawn_llm_thread(frame_copy: Any, timestamp: str, detections: Optional[Seque
   The frame is queued for the background worker, which submits it to the
   Vision LLM and writes the incident report to REPORTS_DIR.
 
-  detections (optional): YOLO boxes for the event, in the mock_yolo format
+  detections (optional): YOLO boxes for the event, in the format
   [{"label": "fire", "bbox": [x1, y1, x2, y2], "confidence": 0.87}, ...].
   When given, they are added to the prompt and a crop of the region is sent too.
   """

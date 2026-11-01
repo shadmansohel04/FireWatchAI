@@ -1,9 +1,9 @@
 """
 Offline tests for the Vision LLM component. No API key or network needed.
 
+  python -m pytest detection/tests/ -v
   python -m unittest discover -s detection/tests -v
 """
-import sys
 import copy
 import json
 import time
@@ -14,13 +14,11 @@ from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
-from vision_llm import LLMConfig, ReportWorker, VisionLLMClient, VisionLLMError, process_event
-from vision_llm.client import FALLBACK_BETA, crop_detections, encode_image
-from vision_llm.mock_client import MOCK_ANALYSIS, MockAnthropicClient, make_response
-from vision_llm.report import format_report_text
-from vision_llm.schema import ANALYSIS_SCHEMA, InvalidResponseError, parse_analysis, validate_analysis
+from detection.vision_llm import LLMConfig, ReportWorker, VisionLLMClient, VisionLLMError, process_event
+from detection.vision_llm.client import FALLBACK_BETA, crop_detections, encode_image
+from detection.vision_llm.mock_client import MOCK_ANALYSIS, MockAnthropicClient, make_response
+from detection.vision_llm.report import format_report_text
+from detection.vision_llm.schema import ANALYSIS_SCHEMA, InvalidResponseError, parse_analysis, validate_analysis
 
 FRAME = np.zeros((480, 640, 3), dtype=np.uint8)
 DETECTIONS = [{"label": "fire", "bbox": [100, 120, 180, 220], "confidence": 0.87}]

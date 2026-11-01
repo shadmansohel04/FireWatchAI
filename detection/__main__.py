@@ -1,15 +1,22 @@
+"""
+FireWatch-AI Vision Pipeline entry point.
+
+Usage:
+  python -m detection                             # live webcam
+  python -m detection --source test_video.mp4     # video file
+  python -m detection --mock                      # use mock YOLO (no weights needed)
+"""
 import os
-import cv2
 import argparse
+
+import cv2
 from dotenv import load_dotenv
 
 # Load environment variables from .env file in project root or current directory
 load_dotenv()
 
-from event_logger import spawn_logger_thread
-from event_tracker import EventTracker
-from llm_handler import spawn_llm_thread
-from yolo_detector import YOLODetector
+from detection.tracking import EventTracker, spawn_logger_thread
+from detection.llm_handler import spawn_llm_thread
 
 
 def main() -> None:
@@ -20,12 +27,17 @@ def main() -> None:
     default='0',
     help='Video source: "0" for live webcam, or a file path (e.g., "test_video.mp4")'
   )
-  default_weights = os.path.join(os.path.dirname(os.path.abspath(__file__)), "best.pt")
+  default_weights = os.path.join(os.path.dirname(os.path.abspath(__file__)), "yolo", "best.pt")
   parser.add_argument(
     '--weights',
     type=str,
     default=default_weights,
     help='Path to the trained YOLO weights'
+  )
+  parser.add_argument(
+    '--mock',
+    action='store_true',
+    help='Use the mock YOLO detector (no weights or ultralytics needed)'
   )
   args = parser.parse_args()
 
@@ -37,7 +49,14 @@ def main() -> None:
     return
 
   tracker = EventTracker(window_size=10, threshold=7, cooldown_seconds=5)
-  detector = YOLODetector(weights_path=args.weights)
+
+  if args.mock:
+    from detection.yolo import MockYOLODetector
+    detector = MockYOLODetector()
+    print("Using mock YOLO detector.")
+  else:
+    from detection.yolo import YOLODetector
+    detector = YOLODetector(weights_path=args.weights)
 
   print("System initialized. Press 'q' or Esc in the video window (or Ctrl+C) to quit.")
 
@@ -71,3 +90,4 @@ def main() -> None:
 
 if __name__ == "__main__":
   main()
+

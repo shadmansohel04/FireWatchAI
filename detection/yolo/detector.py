@@ -16,3 +16,4 @@ class YOLODetector:
   def detect(self, frame: Any) -> Tuple[bool, Any]:
     result = self.model.predict(frame, conf=self.conf, verbose=False)[0]
     return len(result.boxes) > 0, result.plot()
+
